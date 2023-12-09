@@ -60,7 +60,6 @@ public class DaysOfTheYear {
 
   static void handlingThirdLevel() {
     // // this loop will run if user puts words
-    // System.out.println(day + "day64");
     while (!checkInput(userEntry)) {
       System.out.println("Input invalid, please try again!");
       userEntry = sc.next();
@@ -149,8 +148,13 @@ public class DaysOfTheYear {
 
   // switch month case will get called
   static void caseMonth() {
-    System.out.print("Which month do you want to pick: ");
-    checkingMonth();
+    if (currentMonth == TWELVE_MONTH) {
+      System.out.println("Can't change the month, please try again!");
+      selectedMonthDay();
+    } else {
+      System.out.print("Which month do you want to pick: ");
+      checkingMonth();
+    }
   }
 
   // it checks if user entered 29 for feb and 31 for 30 days of month
@@ -171,8 +175,7 @@ public class DaysOfTheYear {
             &&
             (day > SECOND_LAST_DAY))) {
       System.out.println("Input invalid, please try again!");
-
-      caseDay();
+      tempDay();
     } else {
       currentDay = day;
     }
@@ -180,8 +183,23 @@ public class DaysOfTheYear {
 
   // switch day case will get called
   static void caseDay() {
-    System.out.print("Which day do you want to pick: ");
-    checkingDay();
+    if (((currentDay == FEB_MONTH_DAY) && ((currentMonth == SECOND_MONTH)))) {
+      System.out.println("Can't change the day, please try again!");
+      selectedMonthDay();
+    } else if ((currentDay == MAX_DAY)&&((currentMonth==FIRST_MONTH)||(currentMonth==THIRD_MONTH)
+    ||(currentMonth==FIFTH_MONTH)||(currentMonth==SEVENTH_MONTH)||(currentMonth==EIGHT_MONTH)
+    ||(currentMonth==TENTH_MONTH)||(currentMonth==TWELVE_MONTH))) {
+      System.out.println("Can't change the day, please try again!");
+      selectedMonthDay();
+    } else if (((currentDay == SECOND_LAST_DAY) && ((currentMonth == FOURTH_MONTH)
+        || (currentMonth == SIXTH_MONTH) || (currentMonth == NINETH_MONTH)
+        || (currentMonth == ELEVEN_MONTH)))) {
+      System.out.println("Can't change the day, please try again!");
+      selectedMonthDay();
+    } else {
+      System.out.print("Which day do you want to pick: ");
+      checkingDay();
+    }
   }
 
   // switch case for month and day
@@ -203,10 +221,13 @@ public class DaysOfTheYear {
   static String suffixDay(String[] args) {
     String only = "th";
     if (args.length == 2) {
+      if (currentDay <= currentSuffixDay) {
+        currentDay = currentSuffixDay;
+      }
       if (currentDay >= ELEVENTH_DAY && currentDay <= THIRTEENTH_DAY) {
         return "th";
       }
-      switch (day % SUFFIX_DIVISION) {
+      switch (currentDay % SUFFIX_DIVISION) {
         case FIRST_MONTH:
           return "st";
         case SECOND_MONTH:
@@ -247,12 +268,11 @@ public class DaysOfTheYear {
           currentSuffixDay = Integer.parseInt(args[0]);
           currentSuffixMonth = Integer.parseInt(args[1]);
           if (currentDay <= currentSuffixDay && currentMonth <= currentSuffixMonth) {
+            currentMonth = currentSuffixMonth;
             System.out.println(
                 "The current date is: " + currentSuffixDay + suffixDay(args) + " of "
                     + ALL_MONTH_OF_YEAR[currentSuffixMonth - MIN_MONTH]);
           } else {
-            // currentSuffixDay = 0;
-            // currentSuffixMonth = 0;
             if (currentMonth == MIN_MONTH) {
               System.out.println(
                   "The current date is: " + currentDay + suffixDay(args) + " of "
@@ -262,7 +282,7 @@ public class DaysOfTheYear {
               currentSuffixMonth = monthValidate;
               System.out.println(
                   "The current date is: " + currentDay + suffixDay(args) + " of "
-                      + ALL_MONTH_OF_YEAR[currentSuffixMonth - MIN_MONTH]);
+                      + ALL_MONTH_OF_YEAR[currentMonth - MIN_MONTH]);
             }
           }
         } else {
@@ -274,15 +294,16 @@ public class DaysOfTheYear {
         System.out.print(
             "Do you want to increase the day or the month? (day or month): ");
 
-        // if (args.length == 2) {
-        //   if ((currentDay > FEB_LEAP_MONTH_DAY) && ((currentSuffixMonth == SECOND_MONTH))) {
-        //     System.out.print("Can't change the day, please try again!");
-        //     selectedMonthDay();
-        //   } else {
-        //     selectedMonthDay();
-        //   }
-        // } 
-        selectedMonthDay();
+        if (args.length == 2) {
+          if ((currentDay >= FEB_MONTH_DAY) && ((currentMonth == SECOND_MONTH)
+              || (currentSuffixMonth == SECOND_MONTH))) {
+            selectedMonthDay();
+          } else {
+            selectedMonthDay();
+          }
+        } else {
+          selectedMonthDay();
+        }
       }
     }
     // closing the scanner
