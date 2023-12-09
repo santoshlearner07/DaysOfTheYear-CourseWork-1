@@ -168,6 +168,37 @@ public class DaysOfTheYear {
     }
   }
 
+  static void tempDay() {
+    userEntryDay = sc.next();
+    while (!checkInput(userEntryDay)) {
+      System.out.println("Input invalid, please try again!");
+      userEntryDay = sc.next();
+    }
+    day = Integer.parseInt(userEntryDay);
+
+    if (day == 31) {
+      System.out.println("Input invalid, please try again!");
+      tempDay();
+    } else if (
+      ((currentMonth == 2) && (day > 28)) ||
+      (
+        (
+          (currentMonth == 4) ||
+          (currentMonth == 6) ||
+          (currentMonth == 9) ||
+          (currentMonth == 11)
+        ) &&
+        (day > 30)
+      )
+    ) {
+      System.out.println("Input invalid, please try again!");
+
+      caseDay();
+    } else {
+      currentDay = 30;
+    }
+  }
+
   static void caseDay() {
     System.out.print("Which day do you want to pick: ");
     userEntryDay = sc.next();
@@ -190,7 +221,8 @@ public class DaysOfTheYear {
       )
     ) {
       System.out.println("Input invalid, please try again!");
-      selectedMonthDay();
+
+      tempDay();
     } else if (minDay <= day && day <= maxDay) {
       if (currentDay < day) {
         currentDay = day;
