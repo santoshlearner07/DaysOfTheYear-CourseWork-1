@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 public class DaysOfTheYear {
@@ -79,9 +78,9 @@ public class DaysOfTheYear {
       player = player + 1;
       if (currentDay == 31 && currentMonth == 12) {
         if (currentMonth == 12) {
-          // System.out.println(
-          //   "The current date is: " + currentDay + " of " + lastMonth
-          // );
+          System.out.println(
+            "The current date is: " + currentDay + " of " + allMonth[currentMonth - 1]
+          );
         }
         System.out.println(
           "Player " + (player - 1) + " is the winner of the game!"
@@ -90,7 +89,12 @@ public class DaysOfTheYear {
         break;
       } else {
         player();
-        
+        System.out.println(
+                  "The current date is: " +
+                  currentDay +
+                  " of " +
+                  allMonth[currentMonth - 1]
+                );
         System.out.println("It is Player " + player + "'s Turn!");
         System.out.print(
           "Do you want to increase the day or the month? (day or month): "
@@ -99,12 +103,6 @@ public class DaysOfTheYear {
         switch (selectDayOrMonth.toLowerCase()) {
           case "day":
             System.out.print("Which day do you want to pick: ");
-            System.out.println(
-                  "The current date is: " +
-                  currentDay +
-                  " of " +
-                  allMonth[currentMonth - 1]
-                );
             int day = sc.nextInt();
             if (0 < day && day < 32) {
               if (currentDay <= day) {
