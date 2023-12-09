@@ -1,10 +1,14 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class DaysOfTheYear {
 
+  static Scanner sc = new Scanner(System.in);
   static int currentDay = 1;
   static int currentMonth = 1;
   static int player = 0;
+  static String userEntryDay;
+  static String userEntryMonth;
+
   static String[] allMonth = {
     "January",
     "February",
@@ -20,7 +24,6 @@ public class DaysOfTheYear {
     "December",
   };
 
-  // static String firstMonth = "January";
   static String lastMonth = "December";
 
   static void player() {
@@ -32,54 +35,142 @@ public class DaysOfTheYear {
   }
 
   static void checkingDay() {
-    Scanner sc = new Scanner(System.in);
-    System.out.println("You Selected Day");
-    System.out.println("Enter the Day Number");
-    int day = sc.nextInt();
-    while (true) {
-      if ((0 < day && day < 32) && (currentDay < day)) {
+    userEntryDay = sc.next();
+
+    while (!checkInput(userEntryDay)) {
+      System.out.println("Input invalid, please try again!");
+      userEntryDay = sc.next();
+    }
+    int day = Integer.parseInt(userEntryDay);
+    if (0 < day && day < 32) {
+      if (currentDay <= day) {
         currentDay = day;
-        System.out.println("Day- " + day + " Current Day - " + currentDay);
-        break;
       } else {
-        System.out.println("INVALID INPUT - Day is Same or Small");
-        checkingDay();
-        break;
+        System.out.println("Input invalid, please try again!");
       }
+    } else {
+      System.out.println("Input invalid, please try again!");
+      checkingDay();
     }
   }
 
   static void checkingMonth() {
-    Scanner sc = new Scanner(System.in);
-    System.out.println("You Selected Month");
-    System.out.println("Enter the Month Number");
-    int monthValidate = sc.nextInt();
-    while (true) {
-      if (
-        (0 < monthValidate && monthValidate <= 12) &&
-        (currentMonth < monthValidate)
-      ) {
+    userEntryMonth = sc.next();
+    while (!checkInputMonth(userEntryMonth)) {
+      System.out.println("Input invalid, please try again!");
+      userEntryMonth = sc.next();
+    }
+    int monthValidate = Integer.parseInt(userEntryMonth);
+    if ((0 < monthValidate) && (monthValidate <= 12)) {
+      if (currentMonth < monthValidate) {
         currentMonth = monthValidate;
-        System.out.println(
-          "Month- " + monthValidate + "Current Month - " + currentMonth
-        );
-        break;
       } else {
-        System.out.println("INVALID INPUT - Month is Same or Small");
-        checkingMonth();
-        break;
+        System.out.println("Input invalid, please try again!");
       }
+    } else {
+      System.out.println("Input invalid, please try again!");
+      checkingMonth();
+    }
+  }
+
+  static boolean checkInput(String userEntryDay) {
+    boolean hasString = false;
+    int index = 0;
+    while (index < userEntryDay.length()) {
+      if (
+        (userEntryDay.charAt(index) >= '0') &&
+        (userEntryDay.charAt(index) <= '9')
+      ) {
+        hasString = true;
+      }
+      index++;
+    }
+    return hasString;
+  }
+
+  static boolean checkInputMonth(String userEntryMonth) {
+    boolean hasString = false;
+    int index = 0;
+    while (index < userEntryMonth.length()) {
+      if (
+        (userEntryMonth.charAt(index) >= '0') &&
+        (userEntryMonth.charAt(index) <= '9')
+      ) {
+        hasString = true;
+      }
+      index++;
+    }
+    return hasString;
+  }
+
+  static void caseMonth() {
+    System.out.print("Which month do you want to pick: ");
+    userEntryMonth = sc.next();
+    while (!checkInputMonth(userEntryMonth)) {
+      System.out.println("Input invalid, please try again!");
+      userEntryMonth = sc.next();
+    }
+    int monthValidate = Integer.parseInt(userEntryMonth);
+    if ((0 < monthValidate) && (monthValidate <= 12)) {
+      if (currentMonth < monthValidate) {
+        currentMonth = monthValidate;
+      } else {
+        System.out.println("Input invalid, please try again!");
+        checkingMonth();
+      }
+    } else {
+      System.out.println("Input invalid, please try again!");
+      checkingMonth();
+    }
+  }
+
+  static void caseDay() {
+    System.out.print("Which day do you want to pick: ");
+    userEntryDay = sc.next();
+
+    while (!checkInput(userEntryDay)) {
+      System.out.println("Input invalid, please try again!");
+      userEntryDay = sc.next();
+    }
+    int day = Integer.parseInt(userEntryDay);
+    if (0 < day && day < 32) {
+      if (currentDay < day) {
+        currentDay = day;
+      } else {
+        System.out.println("Input invalid, please try again!");
+        checkingDay();
+      }
+    } else {
+      System.out.println("Input invalid, please try again!");
+      checkingDay();
+    }
+  }
+
+  static void selectedMonthDay() {
+    String selectDayOrMonth = sc.next();
+    switch (selectDayOrMonth.toLowerCase()) {
+      case "day":
+        caseDay();
+        break;
+      case "month":
+        caseMonth();
+        break;
+      default:
+        System.out.println("Input invalid, please try again!");
+        selectedMonthDay();
     }
   }
 
   public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
     while (true) {
       player = player + 1;
       if (currentDay == 31 && currentMonth == 12) {
         if (currentMonth == 12) {
           System.out.println(
-            "The current date is: " + currentDay + " of " + allMonth[currentMonth - 1]
+            "The current date is: " +
+            currentDay +
+            " of " +
+            allMonth[currentMonth - 1]
           );
         }
         System.out.println(
@@ -90,54 +181,16 @@ public class DaysOfTheYear {
       } else {
         player();
         System.out.println(
-                  "The current date is: " +
-                  currentDay +
-                  " of " +
-                  allMonth[currentMonth - 1]
-                );
+          "The current date is: " +
+          currentDay +
+          " of " +
+          allMonth[currentMonth - 1]
+        );
         System.out.println("It is Player " + player + "'s Turn!");
         System.out.print(
           "Do you want to increase the day or the month? (day or month): "
         );
-        String selectDayOrMonth = sc.next();
-        switch (selectDayOrMonth.toLowerCase()) {
-          case "day":
-            System.out.print("Which day do you want to pick: ");
-            int day = sc.nextInt();
-            if (0 < day && day < 32) {
-              if (currentDay <= day) {
-                currentDay = day;
-              } else {
-                System.out.println("You cannot decrement the day");
-                checkingDay();
-              }
-            } else {
-              System.out.println("Not correct Day Selected inside if " + day);
-            }
-            break;
-          case "month":
-            System.out.print("Which month do you want to pick: ");
-            int monthValidate = sc.nextInt();
-            if ((0 < monthValidate) && (monthValidate <= 12)) {
-              if (currentMonth <= monthValidate) {
-                currentMonth = monthValidate;
-                // System.out.println(
-                //   "The current date is: " +
-                //   currentDay +
-                //   " of " +
-                //   allMonth[currentMonth - 1]
-                // );
-              } else {
-                System.out.println("You cannot decrement the Month");
-                checkingMonth();
-              }
-            } else {
-              System.out.println("Not correct Month Selected inside if ");
-            }
-            break;
-          default:
-            System.out.println("Invalid Input");
-        }
+        selectedMonthDay();
       }
     }
     sc.close();
